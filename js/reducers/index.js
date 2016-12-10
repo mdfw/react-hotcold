@@ -18,13 +18,12 @@ var hotcoldReducer = function(state, action) {
     var newstate = state || initialRepositoryState;
     
 	if (action.type == actions.RESET_GAME) {
-	    newstate = initialRepositoryState;
 	    newstate.target = randomIntFromInterval(0,100);
+	    newstate.guesses = [];
+	    newstate.gamefeedback = "Make your guess!"
 	    
     } else if (action.type === actions.NEW_GUESS) {
-	    console.log("Reducer got a guess: " + action.guess)
 		var validated = validateGuess(action.guess);
-		debugger;
 		if (!validated.valid) {
 			newstate.gamefeedback = validated.errormsg;
 		} else {
@@ -33,8 +32,9 @@ var hotcoldReducer = function(state, action) {
 			newguesses.push(validated.parsedGuess);
 			newstate.guesses = newguesses;
 		}
-
     }
+    console.log("Finished reducer:");
+    console.dir(newstate);
     return newstate;
 };
 

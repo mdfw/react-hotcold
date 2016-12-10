@@ -20,33 +20,34 @@ var Game = React.createClass({
 
     },
     processGuess: function(e) {
-	    e.preventDefault();
 	    var guess = this.refs.guessinput.value;
 	    console.log("Got a guess: " + guess);
         this.props.dispatch(
             actions.newGuess(guess) 
         );
+		e.preventDefault();
+
     },
     render: function() {
 	   	var guesslist = [];
 	    let guesslen = this.props.guesses.length;
         for (var i=0; i<guesslen; i++) {
-            guesslist.push(<Guess text={this.props.guesses[i]}/>);
-        }
+            guesslist.push(<Guess key={i} text={this.props.guesses[i]}/>);
+       }
 
 	    console.log("Rendering game with: ");
 	    console.dir(this.props)
+	    console.log("gamefeedback: " + this.props.feedback);
         return (
 			<section className="game"> 
-				
-				<h2 id="feedback">{this.props.gamefeedback}</h2>
+				<h2 id="feedback">{this.props.feedback}</h2>
 	
 				<form onSubmit={this.processGuess}>
 					<input type="text" name="userGuess" id="userGuess" className="text" maxLength="3" autoComplete="off" placeholder={this.state.placeholderText} required onFocus={ this.onFocus } onBlur={ this.onBlur } ref="guessinput" />
 	      			<input type="submit" id="guessButton" className="button" name="submit" value="Guess"/>
 				</form>
 				
-	      		<p>Guess #<span id="count"></span>!</p>
+	      		<p>Guess #<span id="count">{this.props.guesses.length+1}</span>!</p>
 				
 				<ul id="guessList" className="guessBox clearfix">
 					{guesslist}
@@ -59,7 +60,7 @@ var Game = React.createClass({
 
 var Guess = function(props) {
     return (
-        <li>{props.guess}</li>
+        <li>{props.text}</li>
     );
 };
 
@@ -69,8 +70,8 @@ var mapStateToProps = function(state, props) {
 	console.dir(state)
 	console.dir(props)
     return {
-        guesses: state.guesses,
-        gamefeedback: state.gamefeedback
+       feedback: state.gamefeedback,
+       guesses: state.guesses
     };
 };
 

@@ -1,8 +1,3 @@
-/**** Things we should be able to do *****/
-/* MAKE A GUESS */
-/* GENERATE RANDOM NUMBER */
-/* RESET GAME */
-
 var MIN_TARGET = 1
 var MAX_TARGET = 100
 
@@ -14,6 +9,15 @@ function randomIntFromInterval(min,max) {
 var createTargetNumber = function() {
 	return randomIntFromInterval(MIN_TARGET,MAX_TARGET);
 }
+
+var GUESS_INPUT_CHANGE = 'GUESS_INPUT_CHANGE'
+var guessInputChange = function(guessinput) {
+	return {
+		type: GUESS_INPUT_CHANGE,
+		guessinput: guessinput
+	}
+}
+
 
 var NEW_GUESS = 'NEW_GUESS'
 var newGuess = function(guess) {
@@ -34,6 +38,9 @@ var resetGame = function () {
 exports.MIN_TARGET = MIN_TARGET;
 exports.MAX_TARGET = MAX_TARGET;
 exports.createTargetNumber = createTargetNumber;
+
+exports.GUESS_INPUT_CHANGE = GUESS_INPUT_CHANGE;
+exports.guessInputChange = guessInputChange;
 
 exports.RESET_GAME = RESET_GAME;
 exports.resetGame = resetGame;

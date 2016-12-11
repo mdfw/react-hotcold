@@ -22,32 +22,41 @@ var Game = React.createClass({
 	    })
 
     },
-    processGuess: function(e) {
-	    var guess = this.refs.guessinput.value;
-	    console.log("Got a guess: " + guess);
+    processGuess: function(guess) {
         this.props.dispatch(
             actions.newGuess(guess) 
         );
-		e.preventDefault();
-
+    },
+    guessInputChange: function(value) {
+	    this.props.dispatch(
+            actions.guessInputChange(value) 
+        );
+    },
+    newGameSubmit: function() {
+	    this.props.dispatch (
+		    actions.resetGame()
+	    )
     },
     render: function() {
-	   var guesslist = null;
-	   if (this.props.guesses.length > 0) {
+	   	var guesslist = null;
+	   	if (this.props.guesses.length > 0) {
 		   guesslist = <Guesslist guesses={this.props.guesses} />;
-	   }
-	    console.log("Rendering game with: ");
-	    console.dir(this.props)
+	   	}
+	   	var guessform = <GuessForm guessvalue={this.props.currentguessinput} onChange={this.guessInputChange} onBlur={this.onBlur} onFocus={this.onFocus} placeholderText={this.state.placeholderText} onSubmit={this.processGuess} />
+	   	var guessCounter = <GuessCounter guessNum={this.props.guesses.length+1} />
+	   	
+	   	if (this.props.basefeedback === constants.BASE_CORRECT) {
+		   	guessform = <NewGameForm onNewGameSubmit={this.newGameSubmit} />
+		   	guessCounter = <GuessCountTotal guessNum={this.props.guesses.length} />
+	   	} 
+
         return (
 			<section className="game"> 
-				<Feedback basefeedback={this.props.basefeedback} relativefeedback={this.props.relativefeedback} previousguess = {this.props.guesses[this.props.guesses.length -1]} />
+				<Feedback basefeedback={this.props.basefeedback} relativefeedback={this.props.relativefeedback} previousguess = {this.props.guesses[this.props.guesses.length -2]} />
 				
-				<form onSubmit={this.processGuess}>
-					<input type="text" name="userGuess" id="userGuess" className="text" maxLength="3" autoComplete="off" placeholder={this.state.placeholderText} required onFocus={ this.onFocus } onBlur={ this.onBlur } ref="guessinput" />
-	      			<input type="submit" id="guessButton" className="button" name="submit" value="Guess"/>
-				</form>
+				{guessform}
 				
-	      		<p>Guess #<span id="count">{this.props.guesses.length+1}</span>!</p>
+	      		{guessCounter}
 				
 				{guesslist}
 	
@@ -60,11 +69,9 @@ var Game = React.createClass({
 /*** Subcomponents **/
 var Feedback = function(props) {
 	return <h2 id="feedback">{textForFeedback(props)}</h2>
-}
+};
 
 function textForFeedback(props) {
-	console.log("getting text for feedback for");
-	console.dir(props);
 	var text = "Make your guess!";
 	switch (props.basefeedback) {
 		case constants.VALIDATION_ERROR_NOGUESS: 
@@ -111,11 +118,53 @@ function textForFeedback(props) {
 			text =  text + ", cooler than " + props.previousguess + ".";
 	}
 	return text;
-}
+};
 
-var Guess = function(props) {
+var GuessForm = React.createClass({
+    formSubmit: function(e) {
+		e.preventDefault();
+	    var guess = this.refs.guessinput.value;
+        this.props.onSubmit(guess);
+    },
+    onChange: function(e) {
+	    this.props.onChange(e.target.value);
+    },
+    render: function() {
+	    return (
+		    <div>
+			<form onSubmit={this.formSubmit}>
+				<input type="text" name="userGuess" id="userGuess" className="text" maxLength="3" autoComplete="off" placeholder={this.props.placeholderText} required onFocus={ this.props.onFocus } onBlur={ this.props.onBlur } onChange={this.onChange} value={this.props.guessvalue} ref="guessinput" />
+				<input type="submit" id="guessButton" className="button" name="submit" value="Guess"/>
+			</form>
+			</div>
+		);
+	}
+});
+
+var NewGameForm = React.createClass({
+	formSubmit: function(e) {
+		e.preventDefault();
+		this.props.onNewGameSubmit();		
+	},
+	render: function() {
+		return (
+			<form onSubmit={this.formSubmit}>
+				<input type="text" name="userGuess" id="userGuess" className="text" maxLength="3" autoComplete="off" placeholder={this.props.placeholderText} disabled />
+				<input type="submit" id="guessButton" className="button" name="submit" value="New Game"/>
+			</form>
+		)
+	}
+});
+
+var GuessCounter = function(props) {
     return (
-        <li>{props.text}</li>
+    	<p>Guess #<span id="count">{props.guessNum}</span>!</p>
+    );
+};
+
+var GuessCountTotal = function(props) {
+    return (
+    	<p>Guessed after <span id="count">{props.guessNum}</span> attempts.</p>
     );
 };
 
@@ -125,20 +174,26 @@ var Guesslist = function(props) {
     for (var i=0; i<guesslen; i++) {
          guesslist.push(<Guess key={i} text={props.guesses[i]}/>);
     }
-
 	return (
 		<ul id="guessList" className="guessBox clearfix">
 			{guesslist}
 		</ul>
 	)
-}
+};
+
+var Guess = function(props) {
+    return (
+        <li>{props.text}</li>
+    );
+};
 
 /** redux store map **/
 var mapStateToProps = function(state, props) {
     return {
        basefeedback: state.basefeedback,
        relativefeedback: state.relativefeedback,
-       guesses: state.guesses
+       guesses: state.guesses,
+       currentguessinput: state.currentguessinput
     };
 };
 

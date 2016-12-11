@@ -8,6 +8,8 @@ var store = require('./store');
 var App = require('./components/app');
 
 document.addEventListener('DOMContentLoaded', function() {
+	console.log("Store in App");
+	console.dir(store);
     ReactDOM.render(
         <Provider store={store}>
             <App />

@@ -1,28 +1,24 @@
 var actions = require('../actions/index');
 
-function randomIntFromInterval(min,max) {
-    return Math.floor(Math.random()*(max-min+1)+min);
-}
 
-var initialRepositoryState = {
-	target:randomIntFromInterval(1,100),
-	guesses: [],
-	gamefeedback: "Make your guess!"
+function createNewState(newtarget) {
+	var theTarget = newtarget;
+	if (!theTarget) {
+		theTarget = actions.createTargetNumber();
+	}
+	return {
+		target:theTarget,
+		guesses: [],
+		gamefeedback: "Make your guess!"
+	}
 }
-
 /* state: the current state object
 	action: the action object 
 	returns: a new state object
 	*/
-var hotcoldReducer = function(state, action) {
-    var newstate = state || initialRepositoryState;
-    
-	if (action.type == actions.RESET_GAME) {
-	    newstate.target = randomIntFromInterval(0,100);
-	    newstate.guesses = [];
-	    newstate.gamefeedback = "Make your guess!"
-	    
-    } else if (action.type === actions.NEW_GUESS) {
+var hotcoldReducer = function(state = createNewState(), action) {
+	if (action.type === actions.NEW_GUESS) {
+	    var newstate = Object.assign({}, state);
 		var validated = validateGuess(action.guess);
 		if (!validated.valid) {
 			newstate.gamefeedback = validated.errormsg;
@@ -31,11 +27,12 @@ var hotcoldReducer = function(state, action) {
 			let newguesses = newstate.guesses;
 			newguesses.push(validated.parsedGuess);
 			newstate.guesses = newguesses;
+			return newstate;
 		}
-    }
-    console.log("Finished reducer:");
-    console.dir(newstate);
-    return newstate;
+	} else if (action.type == actions.RESET_GAME) {
+		return createNewState(action.newtarget);
+    } 
+    return state;
 };
 
 

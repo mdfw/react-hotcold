@@ -13,9 +13,7 @@ var hotcoldReducer = function(state = createNewState(), action) {
 			newstate.basefeedback = baseResponseFromGuess(state.target, validated.parsedGuess);
 			var lastguess = state.guesses[state.guesses.length -1];
 			newstate.relativefeedback = relativeResponseFromGuess(validated.parsedGuess, lastguess, state.target);
-			let newguesses = newstate.guesses;
-			newguesses.push(validated.parsedGuess);
-			newstate.guesses = newguesses;
+			newstate.guesses = newstate.guesses.concat(validated.parsedGuess);
 		}
 		return newstate;
 	} else if (action.type == actions.RESET_GAME) {

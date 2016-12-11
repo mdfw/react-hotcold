@@ -1,4 +1,28 @@
 var actions = require('../actions/index');
+var constants = require('../constants.js');
+
+// The main reducer. Looks for the action and makes decisions.
+var hotcoldReducer = function(state = createNewState(), action) {
+	if (action.type === actions.NEW_GUESS) {
+	    var newstate = Object.assign({}, state);
+		var validated = validateGuess(action.guess);
+		if (!validated.valid) {
+			newstate.basefeedback = validated.errormsg;
+			newstate.relativefeedback = null;
+		} else {
+			newstate.basefeedback = baseResponseFromGuess(state.target, validated.parsedGuess);
+			var lastguess = state.guesses[state.guesses.length -1];
+			newstate.relativefeedback = relativeResponseFromGuess(validated.parsedGuess, lastguess, state.target);
+			let newguesses = newstate.guesses;
+			newguesses.push(validated.parsedGuess);
+			newstate.guesses = newguesses;
+		}
+		return newstate;
+	} else if (action.type == actions.RESET_GAME) {
+		return createNewState(action.newtarget);
+    } 
+    return state;
+};
 
 
 function createNewState(newtarget) {
@@ -6,35 +30,15 @@ function createNewState(newtarget) {
 	if (!theTarget) {
 		theTarget = actions.createTargetNumber();
 	}
+	console.log("Creating a new state: " + constants.BASE_BEGIN);
+
 	return {
 		target:theTarget,
 		guesses: [],
-		gamefeedback: "Make your guess!"
+		basefeedback: constants.BASE_BEGIN,
+		relativefeedback: ""
 	}
 }
-/* state: the current state object
-	action: the action object 
-	returns: a new state object
-	*/
-var hotcoldReducer = function(state = createNewState(), action) {
-	if (action.type === actions.NEW_GUESS) {
-	    var newstate = Object.assign({}, state);
-		var validated = validateGuess(action.guess);
-		if (!validated.valid) {
-			newstate.gamefeedback = validated.errormsg;
-		} else {
-			newstate.gamefeedback = responseFromGuess(baseResponseFromGuess(state.target, validated.parsedGuess), relativeResponseFromGuess(validated.parsedGuess, state.guesses[state.guesses.length -1], state.target));
-			let newguesses = newstate.guesses;
-			newguesses.push(validated.parsedGuess);
-			newstate.guesses = newguesses;
-			return newstate;
-		}
-	} else if (action.type == actions.RESET_GAME) {
-		return createNewState(action.newtarget);
-    } 
-    return state;
-};
-
 
 var validateGuess = function(guess) {
 	var validate = {
@@ -44,17 +48,18 @@ var validateGuess = function(guess) {
 	}
 	if (!guess) {
 		validate.valid = false;
-		validate.errormsg = "Please enter a guess.";
+		validate.errormsg = constants.VALIDATION_ERROR_NOGUESS;
 		return validate;
 	}
 	var parsedGuess = parseInt(guess);
 	if (isNaN(parsedGuess)) {
 		validate.valid = false;
-		validate.errormsg = "Guess should be a number.";
+		validate.errormsg = constants.VALIDATION_ERROR_NAN;
 		return validate;
-	} else if (parsedGuess < 1 || parsedGuess > 100) {
+	} 
+	if (parsedGuess < 1 || parsedGuess > 100) {
 		validate.valid = false;
-		validate.errormsg = "Guess should be between 1 and 100.";
+		validate.errormsg = constants.VALIDATION_ERROR_OUTOFBOUNDS;
 		return validate;
 	}
 	validate.parsedGuess = parsedGuess;
@@ -64,32 +69,35 @@ var validateGuess = function(guess) {
 
 /* Returns Very cold, cold, hot and very hot */
 var baseResponseFromGuess = function(target, guess) {
+	if (target == guess) {
+		return constants.BASE_CORRECT;
+	}
 	var distance = Math.abs(target - guess);
 	if (distance > 50) {
-	 	return "Ice cold";
+	 	return constants.BASE_ICECOLD;
 	} else if (distance > 30) {
-		return "Cold";
+		return constants.BASE_COLD;
 	} else if (distance > 20) {
-		return "Warm";
+		return constants.BASE_WARM;
 	} else if (distance > 10) {
-		return "Hot";
+		return constants.BASE_HOT;
 	} else {
-		return "Super hot";
+		return constants.BASE_SUPERHOT;
 	}
-	return "Hrm...";
+	return constants.BASE_HRM;
 }
 
 /* Returns "hotter than X" or "colder than x" */
-var relativeResponseFromGuess = function (guess, lastGuess, target) {
-	if (!lastGuess || lastGuess == 0) {
+var relativeResponseFromGuess = function (thisGuess, lastGuess, target) {
+	if (!lastGuess || thisGuess == target) {
 		return null;
 	}
-	var currentDistance = Math.abs(target - guess);
+	var currentDistance = Math.abs(target - thisGuess);
 	var previousDistance = Math.abs(target - lastGuess);
 	if (currentDistance > previousDistance) {
-		return "cooler than "+ lastGuess;
+		return constants.RELATIVE_COOLER;
 	} else {
-		return "warmer than " + lastGuess;
+		return constants.RELATIVE_WARMER;
 	}
 	return null;
 }

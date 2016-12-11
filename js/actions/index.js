@@ -31,6 +31,8 @@ var resetGame = function () {
 	}
 }
 
+exports.MIN_TARGET = MIN_TARGET;
+exports.MAX_TARGET = MAX_TARGET;
 exports.createTargetNumber = createTargetNumber;
 
 exports.RESET_GAME = RESET_GAME;

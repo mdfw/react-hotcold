@@ -1,23 +1,22 @@
-# Thinkful React Starter
+# React/Redux Hot/Cold game
 
-A template for developing React apps.
+Thinkful unit 2 learning project for react/redux in Javascript. Converted from a jQuery version here: https://github.com/mdfw/jquery-hot-cold/tree/master
 
-## Getting started
+## Purpose
+A small game to guess a random number. Feedback is given after each guess.
 
-### Setting up a project
+## Directions for usage:
+`$ git clone https://github.com/mdfw/react-hotcold`
 
-* Move into your projects directory: `cd ~/YOUR_PROJECTS_DIRECTORY`
-* Clone this repository: `git clone https://github.com/oampo/thinkful-react-starter YOUR_PROJECT_NAME`
-* Move into the project directory: `cd YOUR_PROJECT_NAME`
-* Install the dependencies: `npm install`
-* Create a new repo on GitHub: https://github.com/new
-    * Make sure the "Initialize this repository with a README" option is left **un**checked
-* Update the remote to point to your GitHub repository: `git remote set-url origin https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY_NAME`
+`$ cd react-hotcold`
 
-### Working on the project
+`npm install`
 
-* Move into the project directory: `cd ~/YOUR_PROJECTS_DIRECTORY/YOUR_PROJECT_NAME`
-* Run the development task: `npm run dev`
-    * Starts a server running at http://localhost:8080
-    * Automatically rebuilds when any of your files change
+`npm start`
 
+Open your browser to: [http://localhost:8080](http://localhost:8080).
+
+## Possible Future Features:
+  - Correct answers should trigger a different color background.
+    * Relative answers could have a separate color as well.
+  - Hide input on finishing game.

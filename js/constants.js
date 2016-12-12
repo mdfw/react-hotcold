@@ -15,5 +15,6 @@ exports.BASE_HRM = 'BASE_HRM'  			// "Hrm..." Only returned on parsing issues.
 
 
 // Relative response feedback
+exports.RELATIVE_SAMEAS = 'RELATIVE_SAMEAS'	// ", same as " + previousguess
 exports.RELATIVE_WARMER = 'RELATIVE_WARMER'	// ", warmer than " + previousguess
 exports.RELATIVE_COOLER = 'RELATIVE_COOLER' // ", cooler than " + previousguess

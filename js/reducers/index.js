@@ -101,6 +101,9 @@ var relativeResponseFromGuess = function (thisGuess, lastGuess, target) {
 	if (!lastGuess || thisGuess == target) {
 		return null;
 	}
+	if (lastGuess === thisGuess) {
+		return constants.RELATIVE_SAMEAS;
+	}
 	var currentDistance = Math.abs(target - thisGuess);
 	var previousDistance = Math.abs(target - lastGuess);
 	if (currentDistance > previousDistance) {

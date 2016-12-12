@@ -116,7 +116,10 @@ function textForFeedback(props) {
 			break;
 		case constants.RELATIVE_COOLER: 
 			text =  text + ", cooler than " + props.previousguess + ".";
-	}
+			break;
+		case constants.RELATIVE_SAMEAS:
+			text=text + ", same as " + props.previousguess + ". Probably should pick a different number.";
+		}
 	return text;
 };
 

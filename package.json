@@ -37,7 +37,7 @@
     "watch:assets": "run-s build:assets _watch:assets",
     "_watch:assets": "chokidar assets/**/* -c \"npm run build:assets\""
   },
-  "author": "Joe Turner <joe@oampo.co.uk>",
+  "author": "Mark Williams <mark@mdfw.me>",
   "license": "UNLICENSED",
   "devDependencies": {
     "babel-cli": "^6.11.4",

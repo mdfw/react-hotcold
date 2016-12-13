@@ -13,17 +13,15 @@ var Storage = {
 
 var createStorage = function() {
   var storage = Object.create(Storage);
-  storage.fewest = 50;
+  storage.fewest = 42;
   return storage;
 }
 
 var storage = createStorage();
 
 var app = express();
+app.use(express.static('build'));
 
-app.get('/', function(request, response) {
-    response.send("Hello World");
-});
 
 app.get('/fewest', function(request, response) {
     response.json({fewest:storage.fewest});
@@ -38,4 +36,7 @@ app.post('/fewest', jsonParser, function(request, response) {
     response.status(201).json(fewest);
 });
 
-app.listen(process.env.PORT || 3000, process.env.IP);
+app.listen(process.env.PORT || 3000, process.env.IP,  function () {
+  console.log('Example app listening on port 3000!')
+});
+

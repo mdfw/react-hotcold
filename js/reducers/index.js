@@ -26,18 +26,28 @@ var hotcoldReducer = function(state = createNewState(), action) {
 			return newstate;
 			break;
 			
+		case actions.FETCH_FEWEST_SUCCESS:
+		  console.log("got new fewest for state: " + action.fewest);
+			var newstate = Object.assign({}, state);
+			newstate.fewestguesses = action.fewest;
+      return newstate;
+      
 		case actions.RESET_GAME:
-			return createNewState(action.newtarget);
+			return createNewState(action.newtarget, state.fewestguesses);
 			break;
 	}
     return state;
 };
 
 
-function createNewState(newtarget) {
+function createNewState(newtarget, fewest) {
 	var theTarget = newtarget;
 	if (!theTarget) {
 		theTarget = actions.createTargetNumber();
+	}
+	var few = -1;
+	if (fewest) {
+		few = fewest;
 	}
 
 	return {
@@ -45,7 +55,8 @@ function createNewState(newtarget) {
 		guesses: [],
 		basefeedback: constants.BASE_BEGIN,
 		relativefeedback: "",
-		currentguessinput: ""
+		currentguessinput: "",
+		fewestguesses: few
 	}
 }
 
@@ -112,14 +123,6 @@ var relativeResponseFromGuess = function (thisGuess, lastGuess, target) {
 		return constants.RELATIVE_WARMER;
 	}
 	return null;
-}
-
-var responseFromGuess = function (base, relative) {
-	var responseText = base;
-	if (relative) {
-		responseText = responseText + ", " + relative;
-	}
-	return responseText;
 }
 
 

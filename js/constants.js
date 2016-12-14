@@ -18,3 +18,7 @@ exports.BASE_HRM = 'BASE_HRM'  			// "Hrm..." Only returned on parsing issues.
 exports.RELATIVE_SAMEAS = 'RELATIVE_SAMEAS'	// ", same as " + previousguess
 exports.RELATIVE_WARMER = 'RELATIVE_WARMER'	// ", warmer than " + previousguess
 exports.RELATIVE_COOLER = 'RELATIVE_COOLER' // ", cooler than " + previousguess
+
+// The max and min for the guessing
+exports.MIN_TARGET = 1
+exports.MAX_TARGET = 100

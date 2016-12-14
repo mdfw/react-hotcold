@@ -3,11 +3,11 @@ var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
 var Storage = {
-	updateTo: function(guess) {
-		if (guess < this.fewest) {
-			this.fewest = guess;
+	updateTo: function(numguesses) {
+		if (numguesses < this.fewest) {
+			this.fewest = numguesses;
 		}
-    return guess;
+    return numguesses;
     } 
 };
 
@@ -28,12 +28,15 @@ app.get('/fewest', function(request, response) {
 });
 
 app.post('/fewest', jsonParser, function(request, response) {
-    if (!('guesses' in request.body)) {
-        return response.sendStatus(400);
-    }
+  console.log("posting fewest: ")
+  console.dir(request.body)
+  if (request.body.numguesses === '') {
+      return response.sendStatus(400);
+  }
 
-    var fewest = storage.updateTo(request.body.guesses);
-    response.status(201).json(fewest);
+  var newcount = storage.updateTo(request.body.numguesses);
+  console.log("New fewest: " + newcount)
+  response.status(201).json(newcount);
 });
 
 app.listen(process.env.PORT || 3000, process.env.IP,  function () {

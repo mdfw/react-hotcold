@@ -77,7 +77,7 @@ var reckon = {
   		validated.errormsg = constants.VALIDATION_ERROR_NAN;
   		return validated;
   	} 
-  	if (parsedGuess < 1 || parsedGuess > 100) {
+  	if (parsedGuess < constants.MIN_TARGET || parsedGuess > constants.MAX_TARGET) {
       validated.valid = false;
   		validated.errormsg = constants.VALIDATION_ERROR_OUTOFBOUNDS;
   		return validated;

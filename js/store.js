@@ -11,4 +11,5 @@ var store = createStore(reducers.hotcoldReducer, composeEnhancers(
     applyMiddleware(thunk)
   ));
 
+
 module.exports  = store;

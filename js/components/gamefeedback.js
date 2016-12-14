@@ -18,7 +18,7 @@ var Feedback = function(props) {
   			text = "Guess should be a number."
   			break;
   		case constants.VALIDATION_ERROR_OUTOFBOUNDS: 
-  			text = "Guess should be between " +  actions.MIN_TARGET +" and " + actions.MAX_TARGET + "."
+  			text = "Guess should be between " +  constants.MIN_TARGET +" and " + constants.MAX_TARGET + "."
   			break;
   		case constants.BASE_BEGIN: 
   			text = "Make your guess!"

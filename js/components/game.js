@@ -7,8 +7,8 @@ var constants = require('../constants.js');
 var Feedback = require('./gamefeedback.js');
 var GuessForm = require('./gameforms.js').guessForm;
 var NewGameForm = require('./gameforms.js').newGameForm;
-var GuessCounter = require('.guesslist.js').guessCounter;
-var GuessCountTotal = require('.guesslist.js').guessCountTotal;
+var GuessCounter = require('./guesscounter.js').guessCounter;
+var GuessCountTotal = require('./guesscounter.js').guessCountTotal;
 var Guesslist = require('./guesslist.js');
 
 /* Constants */

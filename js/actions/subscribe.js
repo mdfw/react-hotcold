@@ -9,7 +9,6 @@ function handleChange() {
   var feedback = thisstate.basefeedback
   if (previousFeedback !== feedback && feedback === constants.BASE_CORRECT) {
     var numguesses = thisstate.guesses.length
-    console.log("sending new number of guesses: " + numguesses)
     previousFeedback = feedback
     store.dispatch(actions.postFewest(numguesses))
   }

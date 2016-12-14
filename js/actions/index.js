@@ -1,13 +1,13 @@
 require('isomorphic-fetch');
 var store = require('../store');
-
+var constants = require('../constants.js');
 
 function randomIntFromInterval(min,max) {
     return Math.floor(Math.random()*(max-min+1)+min);
 }
 
 var createTargetNumber = function() {
-	return randomIntFromInterval(MIN_TARGET,MAX_TARGET);
+	return randomIntFromInterval(constants.MIN_TARGET, constants.MAX_TARGET);
 }
 
 var GUESS_INPUT_CHANGE = 'GUESS_INPUT_CHANGE'
@@ -99,9 +99,6 @@ var postFewest = function(newfewest) {
 	}
 }
 
-
-exports.MIN_TARGET = MIN_TARGET;
-exports.MAX_TARGET = MAX_TARGET;
 exports.createTargetNumber = createTargetNumber;
 
 exports.GUESS_INPUT_CHANGE = GUESS_INPUT_CHANGE;

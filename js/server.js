@@ -28,14 +28,11 @@ app.get('/fewest', function(request, response) {
 });
 
 app.post('/fewest', jsonParser, function(request, response) {
-  console.log("posting fewest: ")
-  console.dir(request.body)
   if (request.body.numguesses === '') {
       return response.sendStatus(400);
   }
 
   var newcount = storage.updateTo(request.body.numguesses);
-  console.log("New fewest: " + newcount)
   response.status(201).json(newcount);
 });
 

@@ -17,8 +17,6 @@ var PLACEHOLDER_TEXT = "Enter your Guess";
 /* Main react class */
 var Game = React.createClass({
   componentDidMount: function() {
-		console.log("console did mount");
-		console.dir(this.props);
 		if (this.props.fewest == -1) {
 			this.props.dispatch(
 				actions.fetchFewest()

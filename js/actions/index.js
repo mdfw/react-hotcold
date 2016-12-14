@@ -1,7 +1,5 @@
 require('isomorphic-fetch');
 var store = require('../store');
-var MIN_TARGET = 1
-var MAX_TARGET = 100
 
 
 function randomIntFromInterval(min,max) {
@@ -19,7 +17,6 @@ var guessInputChange = function(guessinput) {
 		guessinput: guessinput
 	}
 }
-
 
 var NEW_GUESS = 'NEW_GUESS'
 var newGuess = function(guess) {
@@ -54,7 +51,6 @@ var fetchFewestError = function(error) {
 };
 
 var fetchFewest = function() {
-	console.log("Fetching fewest");
     return function(dispatch) {
       var url = 'http://localhost:3000/fewest' ;
       return fetch(url).then(function(response) {
@@ -70,13 +66,12 @@ var fetchFewest = function() {
       })
       .then(function(data) {
         var fewest = data.fewest;
-        console.log("fetch success: " + fewest)
         return dispatch(
           fetchFewestSuccess(fewest)
         );
       })
       .catch(function(error) {
-	      console.log("fetch error: " + error)
+        //TODO: We don't actually do anything with this error.
         return dispatch(
           fetchFewestError(error)
         );
@@ -96,11 +91,11 @@ var postFewest = function(newfewest) {
 				numguesses: newfewest
 			})
 		}).then(function(response) {
-  		console.log('returned from setting fetch.' + dispatch)
   		return dispatch(
     		fetchFewest()
   		)
 		})
+		//TODO: no error handling
 	}
 }
 

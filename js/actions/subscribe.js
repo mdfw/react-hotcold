@@ -1,18 +1,17 @@
-var actions = require('../actions/index');
-var constants = require('../constants.js');
-var store = require('../store');
+const actions = require('../actions/index');
+const constants = require('../constants.js');
+const store = require('../store');
 
-var previousFeedback = ""
+let previousFeedback = '';
 
 function handleChange() {
-  var thisstate = store.getState()
-  var feedback = thisstate.basefeedback
+  const thisstate = store.getState();
+  const feedback = thisstate.basefeedback;
   if (previousFeedback !== feedback && feedback === constants.BASE_CORRECT) {
-    var numguesses = thisstate.guesses.length
-    previousFeedback = feedback
-    store.dispatch(actions.postFewest(numguesses))
+    const numguesses = thisstate.guesses.length;
+    store.dispatch(actions.postFewest(numguesses));
   }
-
+  previousFeedback = feedback;
 }
 
-store.subscribe(handleChange)
+store.subscribe(handleChange);

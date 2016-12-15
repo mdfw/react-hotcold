@@ -1,42 +1,45 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json();
+const express = require('express');
+const bodyParser = require('body-parser');
 
-var Storage = {
-	updateTo: function(numguesses) {
-		if (numguesses < this.fewest) {
-			this.fewest = numguesses;
-		}
+const jsonParser = bodyParser.json();
+
+const Storage = {
+  updateTo: function updateTo(numguesses, force = false) {
+    if (numguesses < this.fewest || force) {
+      this.fewest = numguesses;
+    }
     return numguesses;
-    } 
+  },
 };
 
-var createStorage = function() {
-  var storage = Object.create(Storage);
+const createStorage = function createStorage() {
+  const storage = Object.create(Storage);
   storage.fewest = 42;
   return storage;
-}
+};
 
-var storage = createStorage();
+const storage = createStorage();
 
-var app = express();
+const app = express();
 app.use(express.static('build'));
 
 
-app.get('/fewest', function(request, response) {
-    response.json({fewest:storage.fewest});
+//eslint gives the following error:
+//27:20  error  Unexpected function expression  prefer-arrow-callback
+app.get('/fewest', function fewestGet(request, response) {
+  response.json({ fewest: storage.fewest });
 });
 
-app.post('/fewest', jsonParser, function(request, response) {
+//eslint gives the following error:
+//31:33  error  Unexpected function expression  prefer-arrow-callback
+app.post('/fewest', jsonParser, function fewestPost(request, response) {
   if (request.body.numguesses === '') {
-      return response.sendStatus(400);
+    return response.sendStatus(400);
   }
 
-  var newcount = storage.updateTo(request.body.numguesses);
-  response.status(201).json(newcount);
+  const newcount = storage.updateTo(request.body.numguesses, request.body.force);
+  return response.status(201).json(newcount);
 });
 
-app.listen(process.env.PORT || 3000, process.env.IP,  function () {
-  console.log('Example app listening on port 3000!')
-});
+app.listen(process.env.PORT || 3000, process.env.IP);
 
